@@ -32,7 +32,7 @@ jobs:
         run: dotnet publish ./CICDPROJECT.sln --configuration Release --no-build --output '${{ env.FTP_WEBAPP_PACKAGE_PATH }}'
 
       - name: Deployment
-        uses: Juninhotech/FTP-Deploy-Action@4.3.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           ftp-server: ${{ env.FTP_WEBAPP_NAME }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
