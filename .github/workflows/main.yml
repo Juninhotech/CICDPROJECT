@@ -34,7 +34,7 @@ jobs:
       - name: Deployment
         uses: Juninhotech/FTP-Deploy-Action@4.3.0
         with:
-          ftp-server: ${{ en.FTP_WEBAPP_NAME }}
+          ftp-server: ${{ env.FTP_WEBAPP_NAME }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
-          package: ${{ en.FTP_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.FTP_WEBAPP_PACKAGE_PATH }}
