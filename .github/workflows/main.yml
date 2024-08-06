@@ -5,7 +5,11 @@ on:
   push:
     branches:
     - master
-
+    
+env:
+  FTP_WEBAPP_NAME: site7241.siteasp.net
+  FTP_WEBAPP_PACKAGE_PATH: "./publish"
+  
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -25,4 +29,12 @@ jobs:
         run: dotnet build ./CICDPROJECT.sln --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publish ./CICDPROJECT.sln --configuration Release --no-build
+        run: dotnet publish ./CICDPROJECT.sln --configuration Release --no-build --output '${{ env.FTP_WEBAPP_PACKAGE_PATH }}'
+
+      - name: Deployment
+        uses: Juninhotech/FTP-Deploy-Action@4.3.0
+        with:
+          ftp-server: ${{ en.FTP_WEBAPP_NAME }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          package: ${{ en.FTP_WEBAPP_PACKAGE_PATH }}
