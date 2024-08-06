@@ -1,0 +1,29 @@
+name: Juninho Fibre
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+          
+      - name: Restore
+        run: dotnet restore ./CICDPROJECT.sln
+        
+      - name: Build
+        run: dotnet build ./CICDPROJECT.sln --configuration Release --no-restore
+        
+      - name: Publish
+        run: dotnet publish ./CICDPROJECT.sln --configuration Release --no-build --output
+        
