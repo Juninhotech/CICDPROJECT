@@ -30,4 +30,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           local-dir: ${{ env.FTP_WEBAPP_PACKAGE_PATH }}
-          server-dir: /test/
+          server-dir: /wwwroot/
