@@ -23,14 +23,6 @@ jobs:
       - name: Publish
         run: dotnet publish ./CICDPROJECT.sln --configuration Release --no-build --output '${{ env.FTP_WEBAPP_PACKAGE_PATH }}'
       
-      # New step to clean the wwwroot folder
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
-      - name: Clean wwwroot folder
-        run: |
-          lftp -c "open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ env.FTP_WEBAPP_NAME }}; 
-          rm -rf /wwwroot/*"
-      
       # Deployment step
       - name: Deployment
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -41,3 +33,10 @@ jobs:
           port: 21
           local-dir: ${{ env.FTP_WEBAPP_PACKAGE_PATH }}
           server-dir: /wwwroot/
+          dangerous-clean-slate: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+          timeout: 120000
+          retries: 3
