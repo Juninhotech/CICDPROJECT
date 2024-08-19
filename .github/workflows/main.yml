@@ -31,3 +31,6 @@ jobs:
           port: 21
           local-dir: ${{ env.FTP_WEBAPP_PACKAGE_PATH }}
           server-dir: /wwwroot/
+          dangerous-clean-slate: true
+          timeout: 60000
+          max-attempts: 3
