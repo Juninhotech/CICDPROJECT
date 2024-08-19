@@ -31,3 +31,5 @@ jobs:
           port: 21
           local-dir: ${{ env.FTP_WEBAPP_PACKAGE_PATH }}
           remote-dir: /wwwroot/
+          exclude: '**/wwwroot/**'  # Exclude the parent wwwroot folder if it's being included
+          strip-components: 1  # Removes the base directory from the local path to deploy the contents directly
