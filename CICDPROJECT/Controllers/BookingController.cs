@@ -16,5 +16,23 @@ namespace CICDPROJECT.Controllers
                 message = $"Hello, {name}, your booking time is: {DateTime.Now}"
             });
         }
+
+        [HttpGet("testing")]
+        public IActionResult Get()
+        {
+            List<int> numbers = new List<int>();
+
+            for (int i = 1; i <= 50; i++)
+            {
+                numbers.Add(i);
+            }
+
+            foreach (int number in numbers)
+            {
+                Console.WriteLine(number);
+            }
+            return Ok(numbers);
+        }
+
     }
 }
