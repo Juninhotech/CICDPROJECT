@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var config = new Config
 {
-    ApiKey = "xPFCK8QdNC0zndIYhaZsHzgc9DiVHdSevrro1OUM8T9Wo97P",
+    ApiKey = "",
     Debug = false,      
     Tags = new List<string> { "environment: production", "region: us-east-1" },
 
