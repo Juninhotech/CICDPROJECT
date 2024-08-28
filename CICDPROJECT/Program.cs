@@ -4,14 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var config = new Config
-{
-    ApiKey = "",
-    Debug = false,      
-    Tags = new List<string> { "environment: production", "region: us-east-1" },
+//var config = new Config
+//{
+//    ApiKey = "",
+//    Debug = false,      
+//    Tags = new List<string> { "environment: production", "region: us-east-1" },
 
-};
-var client = await APIToolkit.NewClientAsync(config);
+//};
+//var client = await APIToolkit.NewClientAsync(config);
 
 
 builder.Services.AddControllers();
@@ -22,11 +22,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.Use(async (context, next) =>
-{
-    var apiToolkit = new APIToolkit(next, client);
-    await apiToolkit.InvokeAsync(context);
-});
+//app.Use(async (context, next) =>
+//{
+//    var apiToolkit = new APIToolkit(next, client);
+//    await apiToolkit.InvokeAsync(context);
+//});
 
 app.UseSwagger();
 app.UseSwaggerUI();
