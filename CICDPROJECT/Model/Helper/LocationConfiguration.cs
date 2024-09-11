@@ -26,18 +26,15 @@ namespace CICDPROJECT.Model.Helper
             {
                 var query = $"http://ip-api.com/json/{clientIp}";
                 var locationResponse = await httClient.GetStringAsync(query);
-                var locationData = JsonDocument.Parse(locationResponse).RootElement;
+                var locationData = JObject.Parse(locationResponse);
 
 
-                if (locationData.TryGetProperty("lat", out var latElement) && locationData.TryGetProperty("lon", out var lonElement))
+                if (locationData !=null)
                 {
-                    var lat = latElement.GetDouble();
-                    var lon = lonElement.GetDouble();
-                    location = locationData.GetProperty("city").GetString() ?? "Unknown";
+                    var city = locationData["city"]?.ToString() ?? "unknown";
+                    var country = locationData["country"]?.ToString() ?? "unknown";
 
-                    var weatherUrl = $"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={_openWeatherApiKey}";
-                    var weatherResponse = await httClient.GetStringAsync(weatherUrl);
-                    var weatherData = JObject.Parse(weatherResponse);
+                    location = (city == "unknown" && country == "unknown") ? "unknown" : $"{city}, {country}";
                 }
             }
             return location;
