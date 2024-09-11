@@ -3,6 +3,7 @@ using CICDPROJECT.Model.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 
 namespace CICDPROJECT.Controllers
 {
@@ -67,9 +68,22 @@ namespace CICDPROJECT.Controllers
         [HttpPost("AddUser")]
         public async Task <IActionResult> Adduser(User user)
         {
-            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+            var location = "unknown";
+            var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
 
-            var currentLocation = await _location.GetLocation();
+            using (var httClient = _httpClientFactory.CreateClient())
+            {
+                var locationUrl = $"http://api.openweathermap.org/geo/1.0/direct?q={clientIp}&appid={_openWeatherApiKey}";
+                var locationResponse = await httClient.GetStringAsync(locationUrl);
+                var locationData = JArray.Parse(locationResponse).FirstOrDefault();
+
+                if (locationData != null)
+                {
+                    location = locationData["name"].ToString();
+                 
+                }
+
+            }
 
             UserData.Users.Add(user);
             
@@ -79,7 +93,7 @@ namespace CICDPROJECT.Controllers
                 user,
                 message = "User added sucessfully",
                 ipAddress = clientIp,
-                location = currentLocation,
+                UserLocation = location,
             });
         }
     }
