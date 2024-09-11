@@ -15,8 +15,9 @@ namespace CICDPROJECT.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _openWeatherApiKey;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserController(LocationConfiguration location, IHttpContextAccessor httpContextAccessor, IOptions<OpenWeatherOption> openWeatherOptions)
+        public UserController(LocationConfiguration location, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IOptions<OpenWeatherOption> openWeatherOptions)
         {
+            _httpClientFactory = httpClientFactory;
             _location = location;
             _httpContextAccessor = httpContextAccessor;
             _openWeatherApiKey = openWeatherOptions.Value.ApiKey;
