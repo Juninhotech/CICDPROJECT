@@ -19,7 +19,7 @@ namespace CICDPROJECT.Model.Helper
         public async Task <string> GetLocation()
         {
             var location = "unknown";
-            var clientIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
 
             using (var httClient = _httpClientFactory.CreateClient())
             {

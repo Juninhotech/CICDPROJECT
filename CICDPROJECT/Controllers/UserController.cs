@@ -2,6 +2,7 @@
 using CICDPROJECT.Model.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace CICDPROJECT.Controllers
 {
@@ -10,10 +11,14 @@ namespace CICDPROJECT.Controllers
     public class UserController : ControllerBase
     {
         LocationConfiguration _location;
-
-        public UserController(LocationConfiguration location)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly string _openWeatherApiKey;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserController(LocationConfiguration location, IHttpContextAccessor httpContextAccessor, IOptions<OpenWeatherOption> openWeatherOptions)
         {
             _location = location;
+            _httpContextAccessor = httpContextAccessor;
+            _openWeatherApiKey = openWeatherOptions.Value.ApiKey;
         }
 
         [HttpGet]
@@ -62,6 +67,8 @@ namespace CICDPROJECT.Controllers
         [HttpPost("AddUser")]
         public async Task <IActionResult> Adduser(User user)
         {
+            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+
             var currentLocation = await _location.GetLocation();
 
             UserData.Users.Add(user);
@@ -71,6 +78,7 @@ namespace CICDPROJECT.Controllers
                 StatusCode = 201,
                 user,
                 message = "User added sucessfully",
+                ipAddress = clientIp,
                 location = currentLocation,
             });
         }
