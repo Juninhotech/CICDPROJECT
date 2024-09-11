@@ -1,6 +1,7 @@
 using ApiToolkit.Net;
 using CICDPROJECT.Model;
 using CICDPROJECT.Model.Helper;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,3 +45,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
