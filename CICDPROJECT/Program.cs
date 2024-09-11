@@ -1,4 +1,6 @@
 using ApiToolkit.Net;
+using CICDPROJECT.Model;
+using CICDPROJECT.Model.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+builder.Services.AddTransient<LocationConfiguration>();
+builder.Services.Configure<OpenWeatherOption>(builder.Configuration.GetSection("OpenWeather"));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
