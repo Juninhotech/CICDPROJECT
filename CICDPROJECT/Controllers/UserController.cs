@@ -3,6 +3,7 @@ using CICDPROJECT.Model.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using UAParser;
 
 namespace CICDPROJECT.Controllers
 {
@@ -105,16 +106,14 @@ namespace CICDPROJECT.Controllers
             if (string.IsNullOrEmpty(userAgent))
                 return new DeviceInfo { DeviceName = "Unknown", Model = "Unknown" };
 
-            var regex = new Regex(@"\(([^)]+)\)");
-            var match = regex.Match(userAgent);
+            var parser = Parser.GetDefault();
+            ClientInfo clientInfo = parser.Parse(userAgent);
 
-            if (match.Success)
+            return new DeviceInfo
             {
-                string deviceDetails = match.Groups[1].Value;
-                return new DeviceInfo { DeviceName = "Mobile", Model = deviceDetails };
-            }
-
-            return new DeviceInfo { DeviceName = "Unknown", Model = "Unknown" };
+                DeviceName = clientInfo.Device.Family ?? "Unknown",
+                Model = clientInfo.Device.Model ?? "Unknown"
+            };
         }
     }
 }
