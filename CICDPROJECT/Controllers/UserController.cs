@@ -2,6 +2,7 @@
 using CICDPROJECT.Model.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace CICDPROJECT.Controllers
 {
@@ -73,6 +74,47 @@ namespace CICDPROJECT.Controllers
                 message = "User added sucessfully",
                 location = currentLocation,
             });
+        }
+
+
+        [HttpGet("convert/{number}")]
+        public IActionResult ConvertNumberToWords(int number)
+        {
+            string result = NumberToWordsConverter.ConvertToWords(number);
+            return Ok(new { Number = number, Words = result });
+        }
+
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] Login request)
+        {
+            var userAgent = Request.Headers["User-Agent"].ToString();
+            var deviceInfo = GetDeviceInfo(userAgent);
+
+            return Ok(new
+            {
+                Message = "Login successful",
+                Device = deviceInfo.DeviceName,
+                Model = deviceInfo.Model
+            });
+        }
+
+
+        private DeviceInfo GetDeviceInfo(string userAgent)
+        {
+            if (string.IsNullOrEmpty(userAgent))
+                return new DeviceInfo { DeviceName = "Unknown", Model = "Unknown" };
+
+            var regex = new Regex(@"\(([^)]+)\)");
+            var match = regex.Match(userAgent);
+
+            if (match.Success)
+            {
+                string deviceDetails = match.Groups[1].Value;
+                return new DeviceInfo { DeviceName = "Mobile", Model = deviceDetails };
+            }
+
+            return new DeviceInfo { DeviceName = "Unknown", Model = "Unknown" };
         }
     }
 }
